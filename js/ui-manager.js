@@ -108,6 +108,11 @@ class UIManager {
         if (num > 0) {
             this.createAddSemesterButton();
         }
+        
+        // Set up semester delete button listeners
+        if (this.semesterManager) {
+            this.semesterManager.setupInitialSemesterListeners(num);
+        }
     }
 
     createSemesterColumn(index, totalSemesters) {
