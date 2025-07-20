@@ -10,6 +10,9 @@ class SemesterPlanner {
         this.semesterManager = new SemesterManager(this.stateManager, this.uiManager, this.dragDropManager);
         this.eventHandler = new EventHandler(this.stateManager, this.uiManager, this.dragDropManager);
         
+        // Set the semester manager reference in UI manager
+        this.uiManager.setSemesterManager(this.semesterManager);
+        
         this.init();
     }
 

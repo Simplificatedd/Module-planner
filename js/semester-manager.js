@@ -47,12 +47,6 @@ class SemesterManager {
         if (deleteBtn) {
             deleteBtn.addEventListener('click', () => this.deleteSemester(index));
         }
-
-        const addSemesterBtn = document.getElementById('add-semester-btn');
-        if (addSemesterBtn) {
-            addSemesterBtn.replaceWith(addSemesterBtn.cloneNode(true));
-            document.getElementById('add-semester-btn').addEventListener('click', () => this.addSemester());
-        }
     }
 
     setupSemesterSortable(index) {
@@ -163,11 +157,6 @@ class SemesterManager {
             if (numSemesters > 1) {
                 this.setupSemesterEventListeners(i);
             }
-        }
-
-        const addSemesterBtn = document.getElementById('add-semester-btn');
-        if (addSemesterBtn) {
-            addSemesterBtn.addEventListener('click', () => this.addSemester());
         }
     }
 }

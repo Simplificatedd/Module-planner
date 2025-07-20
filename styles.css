@@ -364,6 +364,11 @@ body {
         color: #d1d5db !important;
     }
     
+    /* Add Semester button dark mode */
+    #add-semester-btn:hover {
+        background-color: rgba(255, 255, 255, 0.1) !important;
+    }
+    
     /* Header dark mode styles */
     header h1 {
         color: #ffffff !important;
@@ -415,6 +420,25 @@ body {
     .sortable-ghost {
         background: #1e3a8a !important;
     }
+}
+
+/* Add Semester Button Styling */
+#add-semester-btn {
+    border: none;
+    background: none;
+    cursor: pointer;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    transition: all 0.2s ease;
+}
+
+#add-semester-btn:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    transform: scale(1.05);
+}
+
+#add-semester-btn:active {
+    transform: scale(0.95);
 }
 
 .course-unit {

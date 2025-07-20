@@ -5,7 +5,12 @@
 class UIManager {
     constructor(stateManager) {
         this.state = stateManager;
+        this.semesterManager = null; // Will be set later
         this.elements = this.initializeElements();
+    }
+
+    setSemesterManager(semesterManager) {
+        this.semesterManager = semesterManager;
     }
 
     initializeElements() {
@@ -126,12 +131,20 @@ class UIManager {
         const addSemesterEl = document.createElement('div');
         addSemesterEl.className = 'add-semester-column bg-gray-50 p-4 rounded-lg shadow-inner border-2 border-dashed border-gray-300 flex items-center justify-center min-h-[400px]';
         addSemesterEl.innerHTML = `
-            <button id="add-semester-btn" class="flex flex-col items-center gap-2 text-gray-500 hover:text-gray-700 transition-colors">
-                <div class="text-4xl">+</div>
+            <button id="add-semester-btn" class="flex flex-col items-center gap-2 text-gray-500 hover:text-gray-700 transition-colors focus:outline-none">
+                <div class="text-4xl font-bold">+</div>
                 <div class="text-sm font-medium">Add Semester</div>
             </button>
         `;
         this.elements.semestersGrid.appendChild(addSemesterEl);
+        
+        // Set up the event listener immediately after creating the button
+        const addSemesterBtn = document.getElementById('add-semester-btn');
+        if (addSemesterBtn && this.semesterManager) {
+            addSemesterBtn.addEventListener('click', () => {
+                this.semesterManager.addSemester();
+            });
+        }
     }
 
     updateProgressBar(currentTotal) {
