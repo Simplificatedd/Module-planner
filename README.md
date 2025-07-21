@@ -2,6 +2,10 @@
 
 A comprehensive module planner for university students to organize their academic journey across multiple semesters.
 
+## 🚀 Live Demo
+
+**Try it now:** [https://module-planner-theta.vercel.app/](https://module-planner-theta.vercel.app/)
+
 ## 🎓 Customize for Your Institution
 
 This planner is designed to be flexible and adaptable. Feel free to fork this project and customize it for your specific school system, degree requirements, or academic structure. Modifications and contributions that make this tool work better for different educational environments are welcome!
