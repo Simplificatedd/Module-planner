@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { Course, SemesterData } from '../types';
+import { useNotificationStore } from './notificationStore';
 
 interface PlannerState {
   // State
@@ -82,6 +83,21 @@ export const usePlannerStore = create<PlannerState>()(
         
         // Don't allow deletion if there are primary courses
         if (primaryCourses.length > 0) {
+          return state;
+        }
+        
+        // NEW: Check if deleting this semester would result in fewer semesters than any module's span
+        const newNumSemesters = state.numSemesters - 1;
+        const maxModuleSpan = Math.max(...state.courses.map(course => course.semesterSpan), 0);
+        
+        if (maxModuleSpan > newNumSemesters) {
+          // Use notification store to show error
+          const { addNotification } = useNotificationStore.getState();
+          addNotification({
+            type: 'error',
+            message: 'Unable to delete semester that will result in less semesters than Module span.',
+            duration: 5000
+          });
           return state;
         }
         

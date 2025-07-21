@@ -2,6 +2,7 @@ import { usePlannerStore } from './store/plannerStore';
 import Header from './components/Header';
 import SetupSection from './components/SetupSection';
 import PlannerSection from './components/PlannerSection';
+import NotificationContainer from './components/NotificationContainer';
 
 function App() {
   const isSetupComplete = usePlannerStore((state) => state.isSetupComplete);
@@ -12,6 +13,7 @@ function App() {
         <Header />
         {!isSetupComplete ? <SetupSection /> : <PlannerSection />}
       </div>
+      <NotificationContainer />
     </div>
   );
 }

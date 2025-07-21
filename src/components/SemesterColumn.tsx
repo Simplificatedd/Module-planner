@@ -4,6 +4,7 @@ import { Trash2 } from 'lucide-react';
 import { Course } from '../types';
 import CourseItem from './CourseItem';
 import { usePlannerStore } from '../store/plannerStore';
+import { useNotificationStore } from '../store/notificationStore';
 
 interface SemesterColumnProps {
   semesterIndex: number;
@@ -15,7 +16,8 @@ const SemesterColumn: React.FC<SemesterColumnProps> = ({ semesterIndex, courses 
     id: `semester-${semesterIndex}`,
   });
 
-  const { getCourseDropSemester, deleteSemester } = usePlannerStore();
+  const { getCourseDropSemester, deleteSemester, courses: allCourses, numSemesters } = usePlannerStore();
+  const { addNotification } = useNotificationStore();
 
   // Group courses by unique ID to avoid duplicates
   const uniqueCourses = courses.reduce((acc, course) => {
@@ -39,12 +41,32 @@ const SemesterColumn: React.FC<SemesterColumnProps> = ({ semesterIndex, courses 
   // Calculate credits only from primary courses (courses that start in this semester)
   const totalCredits = primaryCourses.reduce((sum, course) => sum + course.value, 0);
 
-  // Check if deletion is allowed (no primary courses, only continued courses or empty)
-  const canDelete = primaryCourses.length === 0;
+  // Check conditions for deletion
+  const hasPrimaryCourses = primaryCourses.length > 0;
+  const newNumSemesters = numSemesters - 1;
+  const maxModuleSpan = Math.max(...allCourses.map(course => course.semesterSpan), 0);
+  const wouldViolateSpanConstraint = maxModuleSpan > newNumSemesters;
+  
+  const canDelete = !hasPrimaryCourses && !wouldViolateSpanConstraint;
 
   const handleDeleteSemester = () => {
     if (canDelete) {
       deleteSemester(semesterIndex);
+    } else {
+      // Show notification explaining why deletion is not allowed
+      if (hasPrimaryCourses) {
+        addNotification({
+          type: 'error',
+          message: 'Cannot delete semester with modules starting in it',
+          duration: 5000
+        });
+      } else if (wouldViolateSpanConstraint) {
+        addNotification({
+          type: 'error',
+          message: `Unable to delete semester that will result in less semesters than Module span. (min: ${maxModuleSpan})`,
+          duration: 5000
+        });
+      }
     }
   };
 
@@ -60,17 +82,8 @@ const SemesterColumn: React.FC<SemesterColumnProps> = ({ semesterIndex, courses 
           </span>
           <button
             onClick={handleDeleteSemester}
-            disabled={!canDelete}
-            className={`p-1.5 rounded transition-colors ${
-              canDelete
-                ? 'text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20'
-                : 'text-gray-300 dark:text-gray-600 cursor-not-allowed'
-            }`}
-            title={
-              canDelete
-                ? `Delete Semester ${semesterIndex + 1}`
-                : 'Cannot delete semester with modules in it'
-            }
+            className="p-1.5 rounded transition-colors text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20"
+            title={`Delete Semester ${semesterIndex + 1}`}
           >
             <Trash2 size={16} />
           </button>
