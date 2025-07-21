@@ -6,11 +6,24 @@ A comprehensive module planner for university students to organize their academi
 
 **Try it now:** [https://module-planner-theta.vercel.app/](https://module-planner-theta.vercel.app/)
 
+## 📋 Table of Contents
+
+- [🎓 Customize for Your Institution](#-customize-for-your-institution)
+- [✨ Features](#-features)
+- [🛠 Tech Stack](#-tech-stack)
+- [🚀 Getting Started](#-getting-started)
+- [📖 Usage](#-usage)
+- [🔧 Features in Detail](#-features-in-detail)
+- [🤝 Contributing](#-contributing)
+- [📄 License](#-license)
+- [👨‍💻 Author](#-author)
+- [🙏 Acknowledgments](#-acknowledgments)
+
 ## 🎓 Customize for Your Institution
 
 This planner is designed to be flexible and adaptable. Feel free to fork this project and customize it for your specific school system, degree requirements, or academic structure. Modifications and contributions that make this tool work better for different educational environments are welcome!
 
-## Features
+## ✨ Features
 
 ### 🎯 Academic Planning
 - **Semester Management**: Add, delete, and organize unlimited semesters
@@ -36,20 +49,20 @@ This planner is designed to be flexible and adaptable. Feel free to fork this pr
 - **Local Storage**: Your data is automatically saved and persists between sessions
 - **No Account Required**: All data is stored locally in your browser
 
-## Tech Stack
+## 🛠 Tech Stack
 
-- **Frontend**: React 18 with TypeScript
+- **Frontend**: React 18.3 with TypeScript 5.8
 - **Styling**: Tailwind CSS with dark mode support
 - **Drag & Drop**: @dnd-kit for smooth drag-and-drop interactions
 - **State Management**: Zustand with persistence middleware
-- **Build Tool**: Vite
+- **Build Tool**: Vite 5.4
 - **Icons**: Custom SVG icons and Lucide React
 
-## Getting Started
+## 🚀 Getting Started
 
 ### Prerequisites
-- Node.js (version 16 or higher)
-- npm or yarn
+- Node.js (version 18 or higher)
+- npm, yarn, or pnpm
 
 ### Installation
 
@@ -61,12 +74,26 @@ cd Module-planner
 
 2. Install dependencies:
 ```bash
+# Using npm
 npm install
+
+# Using yarn
+yarn install
+
+# Using pnpm
+pnpm install
 ```
 
 3. Start the development server:
 ```bash
+# Using npm
 npm run dev
+
+# Using yarn
+yarn dev
+
+# Using pnpm
+pnpm dev
 ```
 
 4. Open your browser and navigate to `http://localhost:5173`
@@ -74,12 +101,19 @@ npm run dev
 ### Building for Production
 
 ```bash
+# Using npm
 npm run build
+
+# Using yarn
+yarn build
+
+# Using pnpm
+pnpm build
 ```
 
 The built files will be in the `dist` directory.
 
-## Usage
+## 📖 Usage
 
 1. **Initial Setup**: Set your total credit goal and number of semesters
 2. **Add Modules**: Create modules with names, credit values, and semester spans
@@ -87,7 +121,7 @@ The built files will be in the `dist` directory.
 4. **Track Progress**: Monitor your credit progress and semester distribution
 5. **Manage**: Use the management tools to clear or reorganize your plan
 
-## Features in Detail
+## 🔧 Features in Detail
 
 ### Multi-Semester Modules
 Modules can span multiple semesters with intelligent placement:
@@ -106,7 +140,7 @@ Modules can span multiple semesters with intelligent placement:
 - **Smart Semester Deletion**: Prevents deletion of semesters containing primary modules
 - **Tooltips**: Helpful tooltips explain each management function
 
-## Contributing
+## 🤝 Contributing
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
@@ -114,15 +148,15 @@ Modules can span multiple semesters with intelligent placement:
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## License
+## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## Author
+## 👨‍💻 Author
 
 Created by **Raven Tang** - [LinkedIn](https://www.linkedin.com/in/raven-tang/)
 
-## Acknowledgments
+## 🙏 Acknowledgments
 
 - Built with modern React and TypeScript
 - Styled with Tailwind CSS for beautiful, responsive design
