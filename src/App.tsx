@@ -1,4 +1,5 @@
 import { usePlannerStore } from './store/plannerStore';
+import { Analytics } from '@vercel/analytics/react';
 import Header from './components/Header';
 import SetupSection from './components/SetupSection';
 import PlannerSection from './components/PlannerSection';
@@ -14,6 +15,7 @@ function App() {
         {!isSetupComplete ? <SetupSection /> : <PlannerSection />}
       </div>
       <NotificationContainer />
+      <Analytics />
     </div>
   );
 }
