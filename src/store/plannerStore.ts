@@ -37,6 +37,7 @@ interface PlannerState {
   getProgressPercentage: () => number;
   getCourseStartingSemester: (courseId: string) => number;
   getCourseDropSemester: (courseId: string) => number;
+  isCourseAssigned: (courseId: string) => boolean;
 }
 
 export const usePlannerStore = create<PlannerState>()(
@@ -198,19 +199,100 @@ export const usePlannerStore = create<PlannerState>()(
         courses: [...state.courses, course]
       })),
 
-      updateCourse: (courseId, updates) => set((state) => ({
-        courses: state.courses.map(course =>
+      updateCourse: (courseId, updates) => set((state) => {
+        const currentCourse = state.courses.find(c => c.id === courseId);
+        if (!currentCourse) return state;
+
+        // Check if semester span is being updated
+        const oldSemesterSpan = currentCourse.semesterSpan;
+        const newSemesterSpan = updates.semesterSpan !== undefined ? updates.semesterSpan : oldSemesterSpan;
+        const semesterSpanChanged = newSemesterSpan !== oldSemesterSpan;
+
+        // Update the course in the courses array
+        const updatedCourses = state.courses.map(course =>
           course.id === courseId ? { ...course, ...updates } : course
-        ),
-        semesters: Object.fromEntries(
-          Object.entries(state.semesters).map(([semIndex, courses]) => [
-            semIndex,
-            courses.map(course =>
-              course.id === courseId ? { ...course, ...updates } : course
+        );
+
+        // If semester span hasn't changed, just update course data in semesters
+        if (!semesterSpanChanged) {
+          return {
+            courses: updatedCourses,
+            semesters: Object.fromEntries(
+              Object.entries(state.semesters).map(([semIndex, courses]) => [
+                semIndex,
+                courses.map(course =>
+                  course.id === courseId ? { ...course, ...updates } : course
+                )
+              ])
             )
-          ])
-        )
-      })),
+          };
+        }
+
+        // If semester span changed, we need to redistribute the course
+        const updatedCourse = { ...currentCourse, ...updates };
+        const newSemesters = { ...state.semesters };
+        const newCourseDropSemesters = { ...state.courseDropSemesters };
+        
+        // Find where this course was originally dropped (primary semester)
+        const dropSemester = newCourseDropSemesters[courseId];
+        
+        if (dropSemester === undefined || dropSemester === -1) {
+          // Course is not placed in any semester, just update the courses array
+          return { courses: updatedCourses };
+        }
+
+        // Remove course from ALL semesters first
+        for (let i = 0; i < state.numSemesters; i++) {
+          if (newSemesters[i]) {
+            newSemesters[i] = newSemesters[i].filter(c => c.id !== courseId);
+          }
+        }
+
+        // Re-add the course to the drop semester
+        if (!newSemesters[dropSemester]) {
+          newSemesters[dropSemester] = [];
+        }
+        newSemesters[dropSemester] = [...newSemesters[dropSemester], updatedCourse];
+
+        // Handle multi-semester distribution with the new span
+        if (newSemesterSpan > 1) {
+          const remainingSpan = newSemesterSpan - 1; // -1 because we already placed the primary course
+          let forwardSemesters = 0;
+          let backwardSemesters = 0;
+          
+          // Calculate how many semesters we can extend forward
+          const maxForwardSemesters = state.numSemesters - 1 - dropSemester;
+          forwardSemesters = Math.min(remainingSpan, maxForwardSemesters);
+          
+          // If we can't fit all remaining semesters forward, fill backward
+          backwardSemesters = remainingSpan - forwardSemesters;
+          
+          // Add to forward semesters
+          for (let i = 1; i <= forwardSemesters; i++) {
+            const nextSemIndex = dropSemester + i;
+            if (!newSemesters[nextSemIndex]) {
+              newSemesters[nextSemIndex] = [];
+            }
+            newSemesters[nextSemIndex] = [...newSemesters[nextSemIndex], updatedCourse];
+          }
+          
+          // Add to backward semesters if needed
+          for (let i = 1; i <= backwardSemesters; i++) {
+            const prevSemIndex = dropSemester - i;
+            if (prevSemIndex >= 0) {
+              if (!newSemesters[prevSemIndex]) {
+                newSemesters[prevSemIndex] = [];
+              }
+              newSemesters[prevSemIndex] = [...newSemesters[prevSemIndex], updatedCourse];
+            }
+          }
+        }
+
+        return { 
+          courses: updatedCourses,
+          semesters: newSemesters 
+        };
+      }),
 
       removeCourse: (courseId) => set((state) => ({
         courses: state.courses.filter(course => course.id !== courseId),
@@ -404,6 +486,13 @@ export const usePlannerStore = create<PlannerState>()(
         });
 
         return state.courses.filter(course => !assignedCourses.has(course.id));
+      },
+
+      isCourseAssigned: (courseId: string) => {
+        const state = get();
+        return Object.values(state.semesters).some(courses =>
+          courses.some(course => course.id === courseId)
+        );
       },
 
       getProgressPercentage: () => {

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
 import { Course } from '../types';
 import { usePlannerStore } from '../store/plannerStore';
+import { useNotificationStore } from '../store/notificationStore';
 
 interface CourseEditModalProps {
   course: Course;
@@ -15,6 +16,7 @@ const CourseEditModal: React.FC<CourseEditModalProps> = ({ course, isOpen, onClo
   const [semesterSpan, setSemesterSpan] = useState(course.semesterSpan);
 
   const { updateCourse, numSemesters } = usePlannerStore();
+  const { addNotification } = useNotificationStore();
 
   useEffect(() => {
     setName(course.name);
@@ -23,12 +25,44 @@ const CourseEditModal: React.FC<CourseEditModalProps> = ({ course, isOpen, onClo
   }, [course]);
 
   const handleSave = () => {
-    if (!name.trim() || !value.trim()) return;
+    if (!name.trim() || !value.trim()) {
+      addNotification({
+        type: 'error',
+        message: 'Please fill in all required fields',
+        duration: 3000
+      });
+      return;
+    }
+
+    // Validate semester span
+    if (semesterSpan > numSemesters) {
+      addNotification({
+        type: 'error',
+        message: `Semester span (${semesterSpan}) cannot exceed the total number of semesters (${numSemesters})`,
+        duration: 5000
+      });
+      return;
+    }
+
+    if (semesterSpan < 1) {
+      addNotification({
+        type: 'error',
+        message: 'Semester span must be at least 1',
+        duration: 3000
+      });
+      return;
+    }
 
     updateCourse(course.id, {
       name: name.trim(),
       value: parseFloat(value),
       semesterSpan: semesterSpan,
+    });
+
+    addNotification({
+      type: 'success',
+      message: 'Course updated successfully',
+      duration: 3000
     });
 
     onClose();
@@ -100,8 +134,20 @@ const CourseEditModal: React.FC<CourseEditModalProps> = ({ course, isOpen, onClo
               onKeyPress={handleKeyPress}
               min="1"
               max={numSemesters}
-              className="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              className={`mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border rounded-md shadow-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm ${
+                semesterSpan > numSemesters || semesterSpan < 1
+                  ? 'border-red-300 dark:border-red-600 focus:ring-red-500 focus:border-red-500'
+                  : 'border-gray-300 dark:border-gray-600'
+              }`}
             />
+            {(semesterSpan > numSemesters || semesterSpan < 1) && (
+              <p className="mt-1 text-sm text-red-600 dark:text-red-400">
+                {semesterSpan > numSemesters 
+                  ? `Cannot exceed ${numSemesters} semesters`
+                  : 'Must be at least 1 semester'
+                }
+              </p>
+            )}
           </div>
         </div>
 
@@ -114,7 +160,7 @@ const CourseEditModal: React.FC<CourseEditModalProps> = ({ course, isOpen, onClo
           </button>
           <button
             onClick={handleSave}
-            disabled={!name.trim() || !value.trim()}
+            disabled={!name.trim() || !value.trim() || semesterSpan > numSemesters || semesterSpan < 1}
             className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 dark:bg-indigo-700 border border-transparent rounded-md hover:bg-indigo-700 dark:hover:bg-indigo-800 disabled:bg-gray-300 dark:disabled:bg-gray-600 disabled:cursor-not-allowed"
           >
             Save

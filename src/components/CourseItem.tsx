@@ -9,13 +9,15 @@ interface CourseItemProps {
   showEditButton?: boolean;
   isDraggable?: boolean;
   fromSemester?: number;
+  isAssigned?: boolean;
 }
 
 const CourseItem: React.FC<CourseItemProps> = ({ 
   course, 
   showEditButton = false, 
   isDraggable = true,
-  fromSemester 
+  fromSemester,
+  isAssigned
 }) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   
@@ -37,6 +39,22 @@ const CourseItem: React.FC<CourseItemProps> = ({
 
   const semesterSpanText = course.semesterSpan > 1 ? ` (${course.semesterSpan} sem)` : '';
 
+  // Determine assignment status tag
+  const getAssignmentTag = () => {
+    if (fromSemester !== undefined) {
+      // Course is in a semester grid
+      return '';
+    }
+    
+    if (showEditButton && isAssigned !== undefined) {
+      // Course is in edit mode (module bank) - show actual assignment status
+      return isAssigned ? ' (assigned)' : ' (unassigned)';
+    }
+    
+    // Default case - no tag
+    return '';
+  };
+
   return (
     <>
       <div className="relative group">
@@ -56,7 +74,7 @@ const CourseItem: React.FC<CourseItemProps> = ({
         >
           <span className="font-medium text-sm text-gray-900 dark:text-gray-100 flex-1 pr-2">
             {course.name}{semesterSpanText}
-            {!isDraggable && <span className="text-xs text-gray-500 dark:text-gray-400 ml-1">(assigned)</span>}
+            <span className="text-xs text-gray-500 dark:text-gray-400 ml-1">{getAssignmentTag()}</span>
           </span>
           <span className="font-bold text-sm text-indigo-600 dark:text-indigo-400 flex-shrink-0">
             {course.value}

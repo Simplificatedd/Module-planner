@@ -57,7 +57,7 @@ const SemesterColumn: React.FC<SemesterColumnProps> = ({ semesterIndex, courses 
       if (hasPrimaryCourses) {
         addNotification({
           type: 'error',
-          message: 'Cannot delete semester with modules starting in it',
+          message: 'Cannot delete semester containing modules that start in it. Please remove all modules from the semester first.',
           duration: 5000
         });
       } else if (wouldViolateSpanConstraint) {
