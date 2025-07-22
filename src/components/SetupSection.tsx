@@ -32,13 +32,13 @@ const SetupSection: React.FC = () => {
 
   const handleSemestersChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    // Allow empty string or valid numbers
+    // Allow empty string or valid whole numbers only
     if (value === '') {
       setLocalSemesters(0);
     } else {
       const numValue = Number(value);
-      // Restrict to maximum 2 digits (99)
-      if (numValue <= 99) {
+      // Restrict to whole numbers (integers) and maximum 2 digits (99)
+      if (Number.isInteger(numValue) && numValue <= 99) {
         setLocalSemesters(numValue);
       }
     }
