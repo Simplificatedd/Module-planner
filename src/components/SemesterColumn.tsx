@@ -92,11 +92,11 @@ const SemesterColumn: React.FC<SemesterColumnProps> = ({ semesterIndex, courses 
 
       <div
         ref={setNodeRef}
-        className={`space-y-2 min-h-[300px] p-3 rounded-md transition-colors ${
+        className={`space-y-2 min-h-[300px] p-3 rounded-md transition-all duration-200 ${
           isOver 
-            ? 'bg-indigo-50 dark:bg-indigo-900/20 border-2 border-dashed border-indigo-300 dark:border-indigo-500' 
-            : 'bg-gray-50 dark:bg-gray-700'
-        }`}
+            ? 'bg-indigo-50 dark:bg-indigo-900/20 border-2 border-dashed border-indigo-300 dark:border-indigo-500 scale-[1.02] shadow-lg' 
+            : 'bg-gray-50 dark:bg-gray-700 border-2 border-transparent'
+        } md:min-h-[300px] min-h-[250px]`}
       >
         {/* Primary courses */}
         {primaryCourses.map((course) => (
@@ -124,8 +124,9 @@ const SemesterColumn: React.FC<SemesterColumnProps> = ({ semesterIndex, courses 
         ))}
 
         {courses.length === 0 && (
-          <div className="text-center text-gray-400 dark:text-gray-500 py-8 text-sm">
-            Drop courses here
+          <div className="text-center text-gray-400 dark:text-gray-500 py-8 text-sm select-none">
+            <div>Drop courses here</div>
+            <div className="text-xs mt-1 md:hidden">Touch and hold to drag</div>
           </div>
         )}
       </div>

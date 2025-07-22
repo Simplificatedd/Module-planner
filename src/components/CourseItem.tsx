@@ -20,6 +20,7 @@ const CourseItem: React.FC<CourseItemProps> = ({
   isAssigned
 }) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isTouched, setIsTouched] = useState(false);
   
   // Use different ID for non-draggable items to prevent drag state conflicts
   const draggableId = isDraggable ? course.id : `edit-${course.id}`;
@@ -32,6 +33,38 @@ const CourseItem: React.FC<CourseItemProps> = ({
       fromSemester,
     },
   });
+
+  // Haptic feedback for mobile devices
+  const triggerHapticFeedback = () => {
+    if ('vibrate' in navigator) {
+      navigator.vibrate(50); // Short vibration for feedback
+    }
+  };
+
+  // Touch event handlers for better mobile interaction
+  const handleTouchStart = () => {
+    if (isDraggable) {
+      setIsTouched(true);
+      triggerHapticFeedback();
+    }
+  };
+
+  const handleTouchEnd = () => {
+    setIsTouched(false);
+  };
+
+  // Enhanced listeners with touch events
+  const enhancedListeners = isDraggable ? {
+    ...listeners,
+    onTouchStart: (e: React.TouchEvent) => {
+      handleTouchStart();
+      listeners?.onTouchStart?.(e as any);
+    },
+    onTouchEnd: (e: React.TouchEvent) => {
+      handleTouchEnd();
+      listeners?.onTouchEnd?.(e as any);
+    },
+  } : {};
 
   const style = transform ? {
     transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
@@ -64,12 +97,18 @@ const CourseItem: React.FC<CourseItemProps> = ({
             ...style,
             pointerEvents: isDragging ? 'none' : 'auto'
           }}
-          {...(isDraggable ? listeners : {})}
+          {...(isDraggable ? enhancedListeners : {})}
           {...(isDraggable ? attributes : {})}
-          className={`course-unit bg-white dark:bg-gray-700 p-3 rounded-md shadow-sm border border-gray-200 dark:border-gray-600 flex justify-between items-center relative ${
-            isDragging ? 'opacity-50' : ''
-          } ${isDraggable ? 'cursor-grab active:cursor-grabbing' : 'cursor-default'} ${
+          className={`course-unit bg-white dark:bg-gray-700 p-3 rounded-md shadow-sm border border-gray-200 dark:border-gray-600 flex justify-between items-center relative transition-all duration-200 ${
+            isDragging ? 'opacity-50 scale-105 rotate-1' : ''
+          } ${
+            isTouched ? 'scale-105 shadow-md' : ''
+          } ${
+            isDraggable ? 'cursor-grab active:cursor-grabbing touch-manipulation' : 'cursor-default'
+          } ${
             showEditButton ? 'pr-10' : ''
+          } ${
+            isDraggable ? 'select-none' : ''
           }`}
         >
           <span className="font-medium text-sm text-gray-900 dark:text-gray-100 flex-1 pr-2">

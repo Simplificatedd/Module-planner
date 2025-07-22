@@ -190,15 +190,22 @@ const CourseManagement: React.FC<CourseManagementProps> = ({ isActive = false })
               ? 'bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700' 
               : 'bg-gray-100 dark:bg-gray-700'
           }`}
+          style={{
+            // Prevent touch scrolling interference with drag on mobile
+            touchAction: 'pan-y pinch-zoom',
+            WebkitOverflowScrolling: 'touch'
+          }}
         >
           {displayCourses.map((course) => {
             const isAssigned = isCourseAssigned(course.id);
+            // Allow dragging of unassigned courses even in "Show All" mode
+            const isDraggable = showingAllModules ? !isAssigned : true;
             return (
               <CourseItem
                 key={course.id}
                 course={course}
                 showEditButton={showingAllModules}
-                isDraggable={!showingAllModules} // No dragging allowed in "Show All" mode at all
+                isDraggable={isDraggable}
                 fromSemester={undefined} // Course bank items don't have a source semester
                 isAssigned={isAssigned}
               />
