@@ -13,10 +13,43 @@ const SetupSection: React.FC = () => {
   const [localCredits, setLocalCredits] = useState(totalCreditsGoal);
   const [localSemesters, setLocalSemesters] = useState(numSemesters);
 
+  // Check if inputs are valid
+  const isFormValid = localCredits > 0 && localSemesters > 0;
+
+  const handleCreditsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    // Allow empty string or valid numbers
+    if (value === '') {
+      setLocalCredits(0);
+    } else {
+      const numValue = Number(value);
+      // Restrict to maximum 3 digits (999)
+      if (numValue <= 999) {
+        setLocalCredits(numValue);
+      }
+    }
+  };
+
+  const handleSemestersChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    // Allow empty string or valid numbers
+    if (value === '') {
+      setLocalSemesters(0);
+    } else {
+      const numValue = Number(value);
+      // Restrict to maximum 2 digits (99)
+      if (numValue <= 99) {
+        setLocalSemesters(numValue);
+      }
+    }
+  };
+
   const handleStartPlanning = () => {
-    setTotalCreditsGoal(localCredits);
-    setNumSemesters(localSemesters);
-    startPlanning();
+    if (isFormValid) {
+      setTotalCreditsGoal(localCredits);
+      setNumSemesters(localSemesters);
+      startPlanning();
+    }
   };
 
   return (
@@ -30,9 +63,12 @@ const SetupSection: React.FC = () => {
           <input
             type="number"
             id="total-credits"
-            value={localCredits}
-            onChange={(e) => setLocalCredits(Number(e.target.value))}
+            value={localCredits === 0 ? '' : localCredits}
+            onChange={handleCreditsChange}
             step="0.5"
+            min="0"
+            max="999"
+            placeholder="Enter total credits"
             className="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm placeholder-gray-400 dark:placeholder-gray-500 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           />
         </div>
@@ -43,17 +79,23 @@ const SetupSection: React.FC = () => {
           <input
             type="number"
             id="num-semesters"
-            value={localSemesters}
-            onChange={(e) => setLocalSemesters(Number(e.target.value))}
+            value={localSemesters === 0 ? '' : localSemesters}
+            onChange={handleSemestersChange}
             min="1"
-            max="20"
+            max="99"
+            placeholder="Enter number of semesters"
             className="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm placeholder-gray-400 dark:placeholder-gray-500 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           />
         </div>
       </div>
       <button
         onClick={handleStartPlanning}
-        className="mt-6 w-full bg-indigo-600 dark:bg-indigo-700 text-white py-2 px-4 rounded-md hover:bg-indigo-700 dark:hover:bg-indigo-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 font-semibold"
+        disabled={!isFormValid}
+        className={`mt-6 w-full py-2 px-4 rounded-md font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 transition-colors ${
+          isFormValid
+            ? 'bg-indigo-600 dark:bg-indigo-700 text-white hover:bg-indigo-700 dark:hover:bg-indigo-800 cursor-pointer'
+            : 'bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed'
+        }`}
       >
         Start Planning
       </button>
