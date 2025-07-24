@@ -155,7 +155,7 @@ const ProgressSection: React.FC = () => {
             .total-credits {
               font-size: 16px;
               font-weight: bold;
-              color: #4f46e5;
+              color: #000000;
             }
             
             .modules-list {
