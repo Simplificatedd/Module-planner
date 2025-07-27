@@ -48,6 +48,7 @@ This planner is designed to be flexible and adaptable. Feel free to fork this pr
 ### Data Persistence
 - **Local Storage**: Data is automatically saved and persists between sessions
 - **No Account Required**: All data is stored locally in your browser
+- **Printable Format**: Download a formatted semester plan for printing or saving as PDF
 
 ## Tech Stack
 
@@ -120,6 +121,7 @@ The built files will be in the `dist` directory.
 3. **Plan Semesters**: Drag modules from the module bank to semester columns
 4. **Track Progress**: Monitor your credit progress and semester distribution
 5. **Manage**: Use the management tools to clear or reorganize your plan
+6. **Export Plan**: Use the download button to generate a printable semester overview
 
 ## Features in Detail
 
@@ -139,6 +141,11 @@ Modules can span multiple semesters with placement logic:
 - **Confirmation Dialogs**: Destructive actions like "Clear ALL Modules" require confirmation
 - **Smart Semester Deletion**: Prevents deletion of semesters containing primary modules
 - **Tooltips**: Tooltips explain each management function
+
+### Export and Printing
+- **Formatted Output**: Download button generates a clean, printable semester plan
+- **PDF-Ready**: Output is optimized for saving as PDF or printing
+- **Complete Overview**: Shows all semesters with assigned modules and credit totals
 
 ## Contributing
 
