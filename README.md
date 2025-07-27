@@ -2,63 +2,63 @@
 
 A comprehensive module planner for university students to organize their academic journey across multiple semesters.
 
-## 🚀 Live Demo
+## Live Demo
 
-**Try it now:** [https://module-planner-theta.vercel.app/](https://module-planner-theta.vercel.app/)
+**Try it now:** [https://module-planner.pages.dev/](https://module-planner.pages.dev/)
 
-## 📋 Table of Contents
+## Table of Contents
 
-- [🎓 Customize for Your Institution](#-customize-for-your-institution)
-- [✨ Features](#-features)
-- [🛠 Tech Stack](#-tech-stack)
-- [🚀 Getting Started](#-getting-started)
-- [📖 Usage](#-usage)
-- [🔧 Features in Detail](#-features-in-detail)
-- [🤝 Contributing](#-contributing)
-- [📄 License](#-license)
-- [👨‍💻 Author](#-author)
-- [🙏 Acknowledgments](#-acknowledgments)
+- [Customize for Your Institution](#customize-for-your-institution)
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Getting Started](#getting-started)
+- [Usage](#usage)
+- [Features in Detail](#features-in-detail)
+- [Contributing](#contributing)
+- [License](#license)
+- [Author](#author)
+- [Acknowledgments](#acknowledgments)
 
-## 🎓 Customize for Your Institution
+## Customize for Your Institution
 
 This planner is designed to be flexible and adaptable. Feel free to fork this project and customize it for your specific school system, degree requirements, or academic structure. Modifications and contributions that make this tool work better for different educational environments are welcome!
 
-## ✨ Features
+## Features
 
-### 🎯 Academic Planning
-- **Semester Management**: Add, delete, and organize unlimited semesters
-- **Module Bank**: Create and manage your course modules with credit values
-- **Drag & Drop**: Intuitive drag-and-drop interface for assigning modules to semesters
+### Academic Planning
+- **Semester Management**: Add, delete, and organize semesters
+- **Module Bank**: Create and manage course modules with credit values
+- **Drag & Drop**: Interface for assigning modules to semesters
 - **Multi-Semester Modules**: Support for modules that span multiple semesters
-- **Credit Tracking**: Real-time tracking of credits per semester and overall progress
+- **Credit Tracking**: Track credits per semester and overall progress
 
-### 🌙 User Experience
-- **Dark Mode**: Beautiful dark theme support with automatic system preference detection
-- **Responsive Design**: Works seamlessly on desktop, tablet, and mobile devices
-- **Progress Visualization**: Visual progress bar showing completion towards degree goals
-- **Edit Mode**: Special mode for viewing and editing all modules regardless of assignment status
+### User Experience
+- **Dark Mode**: Automatic dark theme support, according to OS preferences
+- **Responsive Design**: Works on desktop, tablet, and mobile devices
+- **Progress Visualization**: Progress bar showing completion towards degree goals
+- **Edit Mode**: For viewing and editing all modules, even assigned ones
 
-### 🔧 Management Tools
-- **Back to Setup**: Reset the entire planner and return to initial setup
+### Management Tools
+- **Back to Setup**: Reset the planner and return to initial setup
 - **Clear ALL Modules**: Remove all modules from both module bank and semesters
 - **Clear Unassigned Modules**: Remove only unassigned modules, keeping semester assignments
 - **Clear Semesters**: Move all modules from semesters back to the module bank
 - **TrashZone**: Delete modules by dragging them to the trash area
 
-### 💾 Data Persistence
-- **Local Storage**: Your data is automatically saved and persists between sessions
+### Data Persistence
+- **Local Storage**: Data is automatically saved and persists between sessions
 - **No Account Required**: All data is stored locally in your browser
 
-## 🛠 Tech Stack
+## Tech Stack
 
 - **Frontend**: React 18.3 with TypeScript 5.8
 - **Styling**: Tailwind CSS with dark mode support
-- **Drag & Drop**: @dnd-kit for smooth drag-and-drop interactions
+- **Drag & Drop**: @dnd-kit for drag-and-drop interactions
 - **State Management**: Zustand with persistence middleware
 - **Build Tool**: Vite 5.4
-- **Icons**: Custom SVG icons and Lucide React
+- **Icons**: SVG icons and Lucide React
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 - Node.js (version 18 or higher)
@@ -113,7 +113,7 @@ pnpm build
 
 The built files will be in the `dist` directory.
 
-## 📖 Usage
+## Usage
 
 1. **Initial Setup**: Set your total credit goal and number of semesters
 2. **Add Modules**: Create modules with names, credit values, and semester spans
@@ -121,10 +121,10 @@ The built files will be in the `dist` directory.
 4. **Track Progress**: Monitor your credit progress and semester distribution
 5. **Manage**: Use the management tools to clear or reorganize your plan
 
-## 🔧 Features in Detail
+## Features in Detail
 
 ### Multi-Semester Modules
-Modules can span multiple semesters with intelligent placement:
+Modules can span multiple semesters with placement logic:
 - **Forward Filling**: Modules are placed in consecutive forward semesters when possible
 - **Backward Filling**: If forward placement isn't possible, the module extends backward
 - **Continued Modules**: Show as grayed-out placeholders in non-primary semesters
@@ -132,15 +132,15 @@ Modules can span multiple semesters with intelligent placement:
 ### Drag & Drop Logic
 - **Semester Assignment**: Drag modules from the module bank to any semester
 - **Re-assignment**: Move modules between semesters with automatic span recalculation
-- **Trash Deletion**: Drag modules to the trash zone to remove them entirely
+- **Trash Deletion**: Drag modules to the trash zone to remove them
 - **Edit Mode Protection**: Prevents accidental drags when in "Show All / Edit" mode
 
 ### Management Functions
 - **Confirmation Dialogs**: Destructive actions like "Clear ALL Modules" require confirmation
 - **Smart Semester Deletion**: Prevents deletion of semesters containing primary modules
-- **Tooltips**: Helpful tooltips explain each management function
+- **Tooltips**: Tooltips explain each management function
 
-## 🤝 Contributing
+## Contributing
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
@@ -148,17 +148,17 @@ Modules can span multiple semesters with intelligent placement:
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 👨‍💻 Author
+## Author
 
 Created by **Raven Tang** - [LinkedIn](https://www.linkedin.com/in/raven-tang/)
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
-- Built with modern React and TypeScript
-- Styled with Tailwind CSS for beautiful, responsive design
+- Built with React and TypeScript
+- Styled with Tailwind CSS for responsive design
 - Drag-and-drop functionality powered by @dnd-kit
-- State management with Zustand for simplicity and performance
+- State management with Zustand
