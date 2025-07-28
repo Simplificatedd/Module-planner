@@ -84,7 +84,7 @@ const CourseManagement: React.FC<CourseManagementProps> = ({ isActive = false })
     });
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
+  const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       handleAddCourse();
     }
@@ -105,7 +105,7 @@ const CourseManagement: React.FC<CourseManagementProps> = ({ isActive = false })
               id="course-name"
               value={courseName}
               onChange={(e) => setCourseName(e.target.value)}
-              onKeyPress={handleKeyPress}
+              onKeyDown={handleKeyDown}
               placeholder="e.g. CS101"
               className="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm placeholder-gray-400 dark:placeholder-gray-500 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             />
@@ -119,7 +119,7 @@ const CourseManagement: React.FC<CourseManagementProps> = ({ isActive = false })
               id="course-value"
               value={courseValue}
               onChange={(e) => setCourseValue(e.target.value)}
-              onKeyPress={handleKeyPress}
+              onKeyDown={handleKeyDown}
               placeholder="e.g. 5 or 2.5"
               step="0.5"
               min="0"
@@ -133,9 +133,21 @@ const CourseManagement: React.FC<CourseManagementProps> = ({ isActive = false })
             <input
               type="number"
               id="semester-span"
-              value={semesterSpan}
-              onChange={(e) => setSemesterSpan(Number(e.target.value))}
-              onKeyPress={handleKeyPress}
+              value={semesterSpan === 0 ? '' : semesterSpan}
+              onChange={(e) => {
+                const value = e.target.value;
+                // Allow empty string or valid whole numbers only
+                if (value === '') {
+                  setSemesterSpan(0);
+                } else {
+                  const numValue = Number(value);
+                  // Restrict to whole numbers (integers) and reasonable maximum, but allow 0
+                  if (Number.isInteger(numValue) && numValue >= 0 && numValue <= 99) {
+                    setSemesterSpan(numValue);
+                  }
+                }
+              }}
+              onKeyDown={handleKeyDown}
               min="1"
               max={numSemesters}
               className={`mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border rounded-md shadow-sm placeholder-gray-400 dark:placeholder-gray-500 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm ${
@@ -146,16 +158,18 @@ const CourseManagement: React.FC<CourseManagementProps> = ({ isActive = false })
             />
             {(semesterSpan > numSemesters || semesterSpan < 1) && (
               <p className="mt-1 text-sm text-red-600 dark:text-red-400">
-                {semesterSpan > numSemesters 
-                  ? `Cannot exceed ${numSemesters} semesters`
-                  : 'Must be at least 1 semester'
+                {semesterSpan === 0
+                  ? 'Must be at least 1 semester'
+                  : semesterSpan > numSemesters 
+                    ? `Cannot exceed total number of semesters (${numSemesters})`
+                    : 'Must be at least 1 semester'
                 }
               </p>
             )}
           </div>
           <button
             onClick={handleAddCourse}
-            disabled={!courseName.trim() || !courseValue.trim() || semesterSpan > numSemesters || semesterSpan < 1}
+            disabled={!courseName.trim() || !courseValue.trim() || semesterSpan === 0 || semesterSpan > numSemesters || semesterSpan < 1}
             className="w-full bg-indigo-500 dark:bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-600 dark:hover:bg-indigo-700 disabled:bg-gray-300 dark:disabled:bg-gray-600 disabled:cursor-not-allowed font-semibold"
           >
             Add Module

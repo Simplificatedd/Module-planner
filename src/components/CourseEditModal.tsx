@@ -143,7 +143,7 @@ const CourseEditModal: React.FC<CourseEditModalProps> = ({ course, isOpen, onClo
             {(semesterSpan > numSemesters || semesterSpan < 1) && (
               <p className="mt-1 text-sm text-red-600 dark:text-red-400">
                 {semesterSpan > numSemesters 
-                  ? `Cannot exceed ${numSemesters} semesters`
+                  ? `Cannot exceed total number of semesters (${numSemesters})`
                   : 'Must be at least 1 semester'
                 }
               </p>
